@@ -1,0 +1,93 @@
+body {
+	background-color: black;
+	color: white;
+	font-family: sans-serif;
+}
+h1 {
+	width: 500px;
+	margin: 50px auto;
+	padding: 0;
+	text-align: center;
+	font-size: 60pt;
+	border-top: 2px solid white;
+	border-bottom: 2px solid white;
+}
+#board {
+	margin: 100px auto;
+	width: 500px;
+	height: 300px;
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(6, 1fr);
+}
+.cell {
+	background-color: #348;
+	border: 2px solid;
+	border-color: #88a #224 #224 #88a;
+	outline: none;
+	position: relative;
+}
+.atom {
+	transition-property: transform, left, top;
+	transition-duration: 100ms;
+	border-radius: 50%;
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	box-shadow: 0px 0px 1px black;
+}
+.atom.atom1.pos1 {
+	left: 15px;
+	top: 15px;
+}
+.atom.atom1.pos2 {
+	left: 6px;
+	top: 15px;
+}
+.atom.atom1.pos3 {
+	left: 6px;
+	top: 7px;
+}
+.atom.atom1.pos4 {
+	left: 6px;
+	top: 6px;
+}
+.atom.atom2.pos1 {
+	left: 24px;
+	top: 15px;
+}
+.atom.atom2.pos2 {
+	left: 24px;
+	top: 7px;
+}
+.atom.atom2.pos3 {
+	left: 24px;
+	top: 6px;
+}
+.atom.atom3.pos1 {
+	left: 15px;
+	top: 23px;
+}
+.atom.atom3.pos2 {
+	left: 6px;
+	top: 24px;
+}
+.atom.atom4.pos1 {
+	left: 24px;
+	top: 24px;
+}
+.atom.size0 {
+	transform: scale(0.1);
+}
+.atom.player0 {
+	background: radial-gradient(circle at 6px 6px, #ff3333, #000);
+}
+.atom.player1 {
+	background: radial-gradient(circle at 6px 6px, #33ff33, #000);
+}
+.atom.player2 {
+	background: radial-gradient(circle at 6px 6px, #ffaa33, #000);
+}
+.atom.player3 {
+	background: radial-gradient(circle at 6px 6px, #33ffff, #000);
+}
