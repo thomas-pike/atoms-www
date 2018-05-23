@@ -1,7 +1,6 @@
 'use strict';
 var numColumns = 10;
 var numRows = 6;
-var numPlayers = 2;
 var playerColors = ['#ff5555', '#55ff55', '#ffcc55', '#55ccff'];
 var players = [];
 var inputActive = true;
@@ -9,11 +8,28 @@ var playerId = 0;
 var overloaded = [];
 
 document.addEventListener('DOMContentLoaded', function() {
-	//getNumberOfPlayers();
-	setupGame();
+	askNumberOfPlayers();
 }, false);
 
-function setupGame() {
+function askNumberOfPlayers() {
+	var intro = document.createElement('div');
+	intro.id = 'intro';
+	document.body.appendChild(intro);
+	var p = document.createElement('p');
+	p.appendChild(document.createTextNode('how many players?'));
+	intro.appendChild(p);
+	for(var i = 2; i <= 4; i++) {
+		var button = document.createElement('button');
+		button.appendChild(document.createTextNode(i));
+		button.dataset.players = i;
+		button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));});
+		intro.appendChild(button);
+	}
+}
+
+function setupGame(numPlayers) {
+	document.body.removeChild(document.getElementById('intro'));
+	players = [];
 	var board = createBoard(numColumns, numRows);
 	for(var i = 0; i < numPlayers; i++) {
 		var player = new Object;
@@ -71,7 +87,7 @@ function cellClick(cell) {
 
 function nextPlayer() {
 	playerId++;
-	if(playerId >= numPlayers) playerId = 0;
+	if(!players[playerId]) playerId = 0;
 	if(!players[playerId].alive) nextPlayer();
 }
 
