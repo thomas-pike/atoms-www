@@ -1,3 +1,9 @@
+html {
+	cursor: url('cursor.svg') 18 3, default;
+}
+button {
+	cursor: inherit;
+}
 body {
 	background-color: black;
 	color: white;

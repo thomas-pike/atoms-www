@@ -39,6 +39,7 @@ function setupGame(numPlayers) {
 		player.atoms = 0;
 		players[i] = player;
 	}
+	document.documentElement.style.cursor = 'url("cursor-player0.svg") 18 3, default';
 }
 
 function createBoard(numColumns, numRows) {
@@ -88,6 +89,7 @@ function cellClick(cell) {
 function nextPlayer() {
 	playerId++;
 	if(!players[playerId]) playerId = 0;
+	document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
 	if(!players[playerId].alive) nextPlayer();
 }
 
