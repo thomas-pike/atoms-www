@@ -36,8 +36,23 @@ h1 {
 	border: 2px solid;
 	border-color: #88a #224 #224 #88a;
 }
+#status {
+	width: 500px;
+	height: 80px;
+	margin: 10px auto;
+	font-size: 24pt;
+}
+#status button {
+	font-size: 24pt;
+	line-height: 1;
+	padding: 15px;
+	background-color: black;
+	color: white;
+	border: 2px solid;
+	border-color: #88a #224 #224 #88a;
+}
 #board {
-	margin: 100px auto;
+	margin: 10px auto;
 	width: 500px;
 	height: 300px;
 	display: grid;
@@ -114,4 +129,47 @@ h1 {
 }
 .atom.player3 {
 	background: radial-gradient(circle at 6px 6px, #33ffff, #000);
+}
+#playerList {
+	margin: auto;
+	width: 500px;
+}
+.player {
+	width: 40px;
+	height: 30px;
+	margin: 25px 5px 5px 5px;
+	position: relative;
+	float: left;
+	border-radius: 20px 20px 0 0;
+}
+.player:before {
+	content: '';
+	position: absolute;
+	margin: -25px 5px 0 5px;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	border: 1px solid black;
+}
+.player.dead:after {
+	content: 'X';
+	position: absolute;
+	margin-top: -25px;
+	width: 40px;
+	height: 65px;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: red;
+	font-size: 60px;
+}
+.player.player0, .player.player0:before {
+	background-color: #ff3333;
+}
+.player.player1, .player.player1:before {
+	background-color: #33ff33;
+}
+.player.player2, .player.player2:before {
+	background-color: #ffaa33;
+}
+.player.player3, .player.player3:before {
+	background-color: #33ffff;
 }

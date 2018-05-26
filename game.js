@@ -3,7 +3,7 @@ var numColumns = 10;
 var numRows = 6;
 var playerColors = ['#ff5555', '#55ff55', '#ffcc55', '#55ccff'];
 var players = [];
-var inputActive = true;
+var inputActive = false;
 var playerId = 0;
 var overloaded = [];
 
@@ -29,8 +29,15 @@ function askNumberOfPlayers() {
 
 function setupGame(numPlayers) {
 	document.body.removeChild(document.getElementById('intro'));
+	var status = document.createElement('div');
+	status.id = 'status';
+	document.body.appendChild(status);
+	overloaded = [];
 	players = [];
 	var board = createBoard(numColumns, numRows);
+	var playerList = document.createElement('div');
+	playerList.id = 'playerList';
+	document.body.appendChild(playerList);
 	for(var i = 0; i < numPlayers; i++) {
 		var player = new Object;
 		player.alive = true;
@@ -38,8 +45,12 @@ function setupGame(numPlayers) {
 		player.color = playerColors[i];
 		player.atoms = 0;
 		players[i] = player;
+		var playerIcon = document.createElement('div');
+		playerIcon.className = 'player player' + i;
+		playerList.appendChild(playerIcon);
 	}
 	document.documentElement.style.cursor = 'url("cursor-player0.svg") 18 3, default';
+	inputActive = true;
 }
 
 function createBoard(numColumns, numRows) {
@@ -79,7 +90,6 @@ function cellClick(cell) {
 				if(!inputActive) {
 					inputActive = true;
 					nextPlayer();
-					//console.log(players[0].atoms + ' - ' + players[1].atoms + ' (' + (players[0].atoms + players[1].atoms) + ')');
 				}
 			});
 		});
@@ -100,6 +110,8 @@ function addAtom(cell, playerId, postAdd) {
 			players[playerId].atoms += parseInt(cell.dataset.atoms);
 			if(players[cell.dataset.playerId].atoms == 0) {
 				players[cell.dataset.playerId].alive = false;
+				console.log(document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0]);
+				document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0].className += ' dead';
 			}
 		}
 		cell.dataset.playerId = playerId;
@@ -189,8 +201,15 @@ function drawAtoms(cell, postTransition) {
 }
 
 function chainReaction(postChain) {
-	if(gameOver()) {
+	if(isGameOver()) {
 		console.log('Game over!');
+		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
+		var status = document.getElementById('status');
+		status.appendChild(document.createTextNode('Well done. '));
+		var playAgain = document.createElement('button');
+		playAgain.addEventListener('click', function() { restart();});
+		playAgain.appendChild(document.createTextNode('Play again'));
+		status.appendChild(playAgain);
 	} else if(overloaded.length == 0) {
 		postChain();
 	} else {
@@ -203,9 +222,16 @@ function chainReaction(postChain) {
 	}
 }
 
-function gameOver() {
+function isGameOver() {
 	for(var i = 0, player, alive = 0; player = players[i]; i++) {
 		if(player.alive) alive++;
 	}
 	return alive <= 1;
+}
+
+function restart() {
+	for(var child; child = document.body.childNodes[1];) {
+		document.body.removeChild(child);
+	}
+	askNumberOfPlayers();
 }
