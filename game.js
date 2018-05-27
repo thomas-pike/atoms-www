@@ -110,7 +110,6 @@ function addAtom(cell, playerId, postAdd) {
 			players[playerId].atoms += parseInt(cell.dataset.atoms);
 			if(players[cell.dataset.playerId].atoms == 0) {
 				players[cell.dataset.playerId].alive = false;
-				console.log(document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0]);
 				document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0].className += ' dead';
 			}
 		}
@@ -128,6 +127,15 @@ function addAtom(cell, playerId, postAdd) {
 }
 
 function explodeCell(cell, postAdd) {
+	var explosion = document.createElement('div');
+	explosion.className = 'explosion start';
+	cell.appendChild(explosion);
+	window.requestAnimationFrame(function() {
+		window.requestAnimationFrame(function() {
+			explosion.className = 'explosion end';
+			explosion.addEventListener('transitionend', postExplosion);
+		});
+	});
 	var atoms = cell.getElementsByClassName('atom');
 	for(var atom; atom = atoms[0];) {
 		cell.removeChild(atom);
@@ -153,6 +161,12 @@ function explodeCell(cell, postAdd) {
 	if(neighbour = document.getElementById('cell_' + x + '_' + (y + 1))) {
 		addAtom(neighbour, playerId, postAdd);
 		postAdd = function(){};
+	}
+}
+
+function postExplosion() {
+	if(this && this.parentNode) {
+		this.parentNode.removeChild(this);
 	}
 }
 
