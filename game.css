@@ -1,5 +1,8 @@
 html {
 	cursor: url('cursor.svg') 18 3, default;
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
 }
 button {
 	cursor: inherit;
@@ -61,13 +64,22 @@ h1 small {
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	grid-template-rows: repeat(6, 1fr);
+	transition-property: transform;
+	transition-duration: 2000ms;
+}
+#board.start {
+	transform: scale(5) rotate(-0.5turn);
 }
 .cell {
-	background-color: #348;
-	border: 2px solid;
-	border-color: #88a #224 #224 #88a;
+	background-color: transparent;
+	border: 1px solid white;
 	outline: none;
 	position: relative;
+}
+.cell.filled {
+	background-color: #348;
+	border-color: #88a #224 #224 #88a;
+	border-width: 2px;
 }
 .atom {
 	transition-property: transform, left, top;

@@ -22,7 +22,7 @@ function askNumberOfPlayers() {
 		var button = document.createElement('button');
 		button.appendChild(document.createTextNode(i));
 		button.dataset.players = i;
-		button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));});
+		button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));}, false);
 		intro.appendChild(button);
 	}
 }
@@ -34,28 +34,39 @@ function setupGame(numPlayers) {
 	document.body.appendChild(status);
 	overloaded = [];
 	players = [];
+	playerId = 0;
 	var board = createBoard(numColumns, numRows);
 	var playerList = document.createElement('div');
 	playerList.id = 'playerList';
 	document.body.appendChild(playerList);
-	for(var i = 0; i < numPlayers; i++) {
-		var player = new Object;
-		player.alive = true;
-		player.turns = 0;
-		player.color = playerColors[i];
-		player.atoms = 0;
-		players[i] = player;
-		var playerIcon = document.createElement('div');
-		playerIcon.className = 'player player' + i;
-		playerList.appendChild(playerIcon);
-	}
-	document.documentElement.style.cursor = 'url("cursor-player0.svg") 18 3, default';
-	inputActive = true;
+	window.requestAnimationFrame(function() {
+		window.requestAnimationFrame(function() {
+			board.className = '';
+			board.addEventListener('transitionend', function endZoomAnimation() {
+				document.documentElement.style.cursor = 'url("cursor-player0.svg") 18 3, default';
+				for(var i = 0; i < numPlayers; i++) {
+					var player = new Object;
+					player.alive = true;
+					player.turns = 0;
+					player.color = playerColors[i];
+					player.atoms = 0;
+					players[i] = player;
+					var playerIcon = document.createElement('div');
+					playerIcon.className = 'player player' + i;
+					playerList.appendChild(playerIcon);
+				}
+				var cells = board.childNodes;
+				fillCells(cells);
+				board.removeEventListener('transitionend', endZoomAnimation, false);
+			}, false);
+		});
+	});
 }
 
 function createBoard(numColumns, numRows) {
 	var board = document.createElement('div');
 	board.id = 'board';
+	board.className = 'start';
 	document.body.appendChild(board);
 	for(var row = 1; row <= numRows; row++) {
 		for(var column = 1; column <= numColumns; column++) {
@@ -78,6 +89,21 @@ function createBoard(numColumns, numRows) {
 		}
 	}
 	return board;
+}
+
+function fillCells(cells) {
+	for(var i = 0, cell; cell = cells[i]; i++) {
+		setTimeout(fillCell, 50 * (parseInt(cell.style.gridColumn) + parseInt(cell.style.gridRow)), cell);
+	}
+	setTimeout(startGame, 50 * (numRows + numColumns));
+}
+
+function fillCell(cell) {
+	cell.className = 'cell filled';
+}
+
+function startGame() {
+	inputActive = true;
 }
 
 function cellClick(cell) {
