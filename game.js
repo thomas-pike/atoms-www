@@ -93,7 +93,7 @@ function createBoard(numColumns, numRows) {
 
 function fillCells(cells) {
 	for(var i = 0, cell; cell = cells[i]; i++) {
-		setTimeout(fillCell, 50 * (parseInt(cell.style.gridColumn) + parseInt(cell.style.gridRow)), cell);
+		setTimeout(fillCell, 50 * (numRows + numColumns - parseInt(cell.style.gridColumn) - parseInt(cell.style.gridRow)), cell);
 	}
 	setTimeout(startGame, 50 * (numRows + numColumns));
 }
