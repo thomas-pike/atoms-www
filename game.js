@@ -256,21 +256,19 @@ function nextPlayer() {
 }
 
 function addAtom(cell, playerId, postAdd) {
-	if(cell.dataset.atoms <= cell.dataset.maxAtoms) {
-		if(cell.dataset.playerId != -1 && cell.dataset.playerId != playerId) {
-			players[cell.dataset.playerId].atoms -= parseInt(cell.dataset.atoms);
-			players[playerId].atoms += parseInt(cell.dataset.atoms);
-			if(players[cell.dataset.playerId].atoms == 0) {
-				players[cell.dataset.playerId].alive = false;
-				document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0].className += ' dead';
-			}
+	if(cell.dataset.playerId != -1 && cell.dataset.playerId != playerId) {
+		players[cell.dataset.playerId].atoms -= parseInt(cell.dataset.atoms);
+		players[playerId].atoms += parseInt(cell.dataset.atoms);
+		if(players[cell.dataset.playerId].atoms == 0) {
+			players[cell.dataset.playerId].alive = false;
+			document.getElementById('playerList').getElementsByClassName('player' + cell.dataset.playerId)[0].className += ' dead';
 		}
-		cell.dataset.playerId = playerId;
-		cell.dataset.atoms++;
-		players[playerId].atoms++;
-		if(cell.dataset.atoms > cell.dataset.maxAtoms) {
-			overloaded.push(cell);
-		}
+	}
+	cell.dataset.playerId = playerId;
+	cell.dataset.atoms++;
+	players[playerId].atoms++;
+	if(parseInt(cell.dataset.atoms) == parseInt(cell.dataset.maxAtoms) + 1) {
+		overloaded.push(cell);
 	}
 	drawAtoms(cell, function postDraw(e) {
 		this.removeEventListener('transitionend', postDraw);
@@ -292,9 +290,19 @@ function explodeCell(cell, postAdd) {
 	for(var atom; atom = atoms[0];) {
 		cell.removeChild(atom);
 	}
-	players[cell.dataset.playerId].atoms -= parseInt(cell.dataset.atoms);
+	players[cell.dataset.playerId].atoms -= parseInt(cell.dataset.maxAtoms) + 1;
+	var overflowAtoms = parseInt(cell.dataset.atoms) - (parseInt(cell.dataset.maxAtoms) + 1);
 	cell.dataset.atoms = 0;
-	cell.dataset.playerId = -1;
+	if(overflowAtoms == 0) {
+		cell.dataset.playerId = -1;
+	} else {
+		for(var i = 1; i <= overflowAtoms; i++) {
+			cell.dataset.atoms++;
+			var newAtom = document.createElement('div');
+			newAtom.className = 'atom atom' + i + ' player' + playerId + ' pos' + (overflowAtoms - i + 1);
+			cell.appendChild(newAtom);
+		}
+	}
 	var x = parseInt(cell.style.gridColumn, 10);
 	var y = parseInt(cell.style.gridRow, 10);
 	var neighbour;
@@ -352,7 +360,7 @@ function drawAtoms(cell, postTransition) {
 				newAtom.className = 'atom atom3 player' + cell.dataset.playerId + ' pos1';
 			});
 		});
-	} else if(cell.dataset.atoms >= 4) {
+	} else if(cell.dataset.atoms == 4) {
 		cell.getElementsByClassName('atom1')[0].className = 'atom atom1 player' + cell.dataset.playerId + ' pos4';
 		cell.getElementsByClassName('atom2')[0].className = 'atom atom2 player' + cell.dataset.playerId + ' pos3';
 		cell.getElementsByClassName('atom3')[0].className = 'atom atom3 player' + cell.dataset.playerId + ' pos2';
@@ -361,6 +369,15 @@ function drawAtoms(cell, postTransition) {
 		window.requestAnimationFrame(function() {
 			window.requestAnimationFrame(function() {
 				newAtom.className = 'atom atom4 player' + cell.dataset.playerId + ' pos1';
+			});
+		});
+	} else if(cell.dataset.atoms >= 5) {
+		console.log(cell.dataset.atoms + " at " + cell.id);
+		newAtom.className = 'atom atom5 player' + cell.dataset.playerId + ' pos1 size0';
+		cell.appendChild(newAtom);
+		window.requestAnimationFrame(function() {
+			window.requestAnimationFrame(function() {
+				newAtom.className = 'atom atom5 player' + cell.dataset.playerId + ' pos1';
 			});
 		});
 	}
