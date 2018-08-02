@@ -7,11 +7,24 @@ var minPlayers = 2;
 var maxPlayers = 4;
 var inputActive = false;
 var playerId = 0;
+var moves = 0;
 var overloaded = [];
+var debug = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
+	var params = new URLSearchParams(window.location.search.substring(1));
+	if(params.get('debug')) {
+		debug = params.get('debug');
+	}
 	setupDefaults();
-	configureGame();
+	if(debug) {
+		for(var i = 0; i <= 1; i++) {
+			players[i].vi = new VI(i, -1);
+		}
+		setupGame();
+	} else {
+		configureGame();
+	}
 }, false);
 
 class Player {
@@ -131,7 +144,9 @@ function configurePlayer(playerId, level) {
 }
 
 function setupGame() {
-	document.body.removeChild(document.getElementById('intro'));
+	if(document.getElementById('intro')) {
+		document.body.removeChild(document.getElementById('intro'));
+	}
 	var status = document.createElement('div');
 	status.id = 'status';
 	document.body.appendChild(status);
@@ -204,6 +219,7 @@ function cellClick(cell) {
 
 function doMove(cell) {
 	if(cell.dataset.playerId == -1 || cell.dataset.playerId == playerId) {
+		moves++;
 		var activePlayerId = playerId;
 		inputActive = false;
 		players[playerId].turns++;
@@ -221,6 +237,11 @@ function doMove(cell) {
 }
 
 function nextPlayer() {
+	if(debug && moves >= debug) {
+		for(var i = 0; i <= 1; i++) {
+			delete players[i].vi;
+		}
+	}
 	playerId++;
 	if(!players[playerId]) playerId = 0;
 	if(!players[playerId].alive) {
