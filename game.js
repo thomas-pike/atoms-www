@@ -3,38 +3,140 @@ var numColumns = 10;
 var numRows = 6;
 var playerColors = ['#ff5555', '#55ff55', '#ffcc55', '#55ccff'];
 var players = [];
+var minPlayers = 2;
+var maxPlayers = 4;
 var inputActive = false;
 var playerId = 0;
 var overloaded = [];
 
 document.addEventListener('DOMContentLoaded', function() {
-	askNumberOfPlayers();
+	setupDefaults();
+	configureGame();
 }, false);
 
-function askNumberOfPlayers() {
+class Player {
+	constructor(playerId) {
+		this.playerId = playerId;
+		this.color = playerColors[playerId];
+		this.alive = true;
+		this.turns = 0;
+		this.atoms = 0;
+		this.wins = 0;
+	}
+}
+
+function setupDefaults() {
+	for(var i = 0; i <= 1; i++) {
+		players[i] = new Player(i);
+	}
+}
+
+function configureGame() {
 	var intro = document.createElement('div');
 	intro.id = 'intro';
 	document.body.appendChild(intro);
 	var p = document.createElement('p');
-	p.appendChild(document.createTextNode('how many players?'));
+	p.appendChild(document.createTextNode('Number of players: '));
+	for(var i = minPlayers; i <= maxPlayers; i++) {
+		var radio = document.createElement('input');
+		radio.type = 'radio';
+		radio.name = 'players';
+		radio.id = 'players_' + i;
+		radio.value = i;
+		if(i == players.length) {
+			radio.checked = true;
+		}
+		radio.addEventListener('change', function() { setNumberOfPlayers(this.value)});
+		p.appendChild(radio);
+		var label = document.createElement('label');
+		label.htmlFor = 'players_' + i;
+		label.appendChild(document.createTextNode(i));
+		p.appendChild(label);
+	}
 	intro.appendChild(p);
-	for(var i = 2; i <= 4; i++) {
-		var button = document.createElement('button');
-		button.appendChild(document.createTextNode(i));
-		button.dataset.players = i;
-		button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));}, false);
-		intro.appendChild(button);
+	var table = document.createElement('table');
+	var tbody = document.createElement('tbody');
+	for(var i = 0; i <= 3; i++) {
+		var tr = document.createElement('tr');
+		tr.id = 'playerOptions' + i;
+		if(!players[i]) tr.style.display = 'none';
+		var th = document.createElement('th');
+		th.className = 'player' + i;
+		th.appendChild(document.createTextNode('Player ' + (i + 1)));
+		tr.appendChild(th);
+		var playerTypes = ['Human', 'CPU (Easy)'];
+		for(var j = 0, playerType; playerType = playerTypes[j]; j++) {
+			var td = document.createElement('td');
+			var radio = document.createElement('input');
+			radio.type = 'radio';
+			radio.name = 'player' + i;
+			radio.id = 'player_' + i + '_' + j;
+			radio.dataset.playerId = i;
+			radio.value = j;
+			if(j == 0 && (!players[i] || !players[i].vi)) {
+				radio.checked = true;
+			} else if (players[i] && players[i].vi && players[i].vi.level == j) {
+				radio.checked = true;
+			}
+			radio.addEventListener('change', function() { configurePlayer(parseInt(this.dataset.playerId), parseInt(this.value))});
+			td.appendChild(radio);
+			var label = document.createElement('label');
+			label.htmlFor = 'player_' + i + '_' + j;
+			label.appendChild(document.createTextNode(playerType));
+			td.appendChild(label);
+			tr.appendChild(td);
+		}
+		tbody.appendChild(tr);
+	}
+	table.appendChild(tbody);
+	intro.appendChild(table);
+	var p = document.createElement('p');
+	var button = document.createElement('button');
+	button.appendChild(document.createTextNode('Start game'));
+	button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));}, false);
+	p.appendChild(button);
+	intro.appendChild(p);
+}
+
+function setNumberOfPlayers(numPlayers) {
+	for(var i = maxPlayers - 1; i >= 0; i--) {
+		if(i < numPlayers) {
+			if(!players[i]) {
+				players[i] = new Player(i);
+				var level = document.querySelector('input[name="player' + i + '"]:checked').value;
+				if(level > 0) {
+					players[i].vi = new VI(i, level);
+				}
+			}
+			document.getElementById('playerOptions' + i).style.display = '';
+		} else {
+			if(players[i]) {
+				players.pop();
+			}
+			document.getElementById('playerOptions' + i).style.display = 'none';
+		}
 	}
 }
 
-function setupGame(numPlayers) {
+function configurePlayer(playerId, level) {
+	if(level == 0) {
+		delete players[playerId].vi;
+	} else {
+		if(!players[playerId].vi) {
+			players[playerId].vi = new VI(playerId, level);
+		} else {
+			players[playerId].vi.level = level;
+		}
+	}
+}
+
+function setupGame() {
 	document.body.removeChild(document.getElementById('intro'));
 	var status = document.createElement('div');
 	status.id = 'status';
 	document.body.appendChild(status);
 	overloaded = [];
-	players = [];
-	playerId = 0;
+	playerId = -1;
 	var board = createBoard(numColumns, numRows);
 	var playerList = document.createElement('div');
 	playerList.id = 'playerList';
@@ -43,14 +145,7 @@ function setupGame(numPlayers) {
 		window.requestAnimationFrame(function() {
 			board.className = '';
 			board.addEventListener('transitionend', function endZoomAnimation() {
-				document.documentElement.style.cursor = 'url("cursor-player0.svg") 18 3, default';
-				for(var i = 0; i < numPlayers; i++) {
-					var player = new Object;
-					player.alive = true;
-					player.turns = 0;
-					player.color = playerColors[i];
-					player.atoms = 0;
-					players[i] = player;
+				for(var i = 0; i < players.length; i++) {
 					var playerIcon = document.createElement('div');
 					playerIcon.className = 'player player' + i;
 					playerList.appendChild(playerIcon);
@@ -95,38 +190,48 @@ function fillCells(cells) {
 	for(var i = 0, cell; cell = cells[i]; i++) {
 		setTimeout(fillCell, 50 * (numRows + numColumns - parseInt(cell.style.gridColumn) - parseInt(cell.style.gridRow)), cell);
 	}
-	setTimeout(startGame, 50 * (numRows + numColumns));
+	setTimeout(nextPlayer, 50 * (numRows + numColumns));
 }
 
 function fillCell(cell) {
 	cell.className = 'cell filled';
 }
 
-function startGame() {
-	inputActive = true;
+function cellClick(cell) {
+	if(!inputActive) return false;
+	doMove(cell);
 }
 
-function cellClick(cell) {
-	if(!inputActive) return;
+function doMove(cell) {
 	if(cell.dataset.playerId == -1 || cell.dataset.playerId == playerId) {
+		var activePlayerId = playerId;
 		inputActive = false;
 		players[playerId].turns++;
 		addAtom(cell, playerId, function() {
 			chainReaction(function() {
-				if(!inputActive) {
-					inputActive = true;
+				if(playerId == activePlayerId) {
 					nextPlayer();
 				}
 			});
 		});
+		return true;
+	} else {
+		return false;
 	}
 }
 
 function nextPlayer() {
 	playerId++;
 	if(!players[playerId]) playerId = 0;
-	document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
-	if(!players[playerId].alive) nextPlayer();
+	if(!players[playerId].alive) {
+		nextPlayer();
+	} else if(players[playerId].vi) {
+		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
+		players[playerId].vi.play();
+	} else {
+		document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
+		inputActive = true;
+	}
 }
 
 function addAtom(cell, playerId, postAdd) {
@@ -273,5 +378,10 @@ function restart() {
 	for(var child; child = document.body.childNodes[1];) {
 		document.body.removeChild(child);
 	}
-	askNumberOfPlayers();
+	for(var i = 0, player; player = players[i]; i++) {
+		player.alive = true;
+		player.turns = 0;
+		player.atoms = 0;
+	}
+	configureGame();
 }
