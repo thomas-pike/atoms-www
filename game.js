@@ -248,7 +248,7 @@ function nextPlayer() {
 		nextPlayer();
 	} else if(players[playerId].vi) {
 		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
-		players[playerId].vi.play();
+		setTimeout(function() {players[playerId].vi.play()}, 300);
 	} else {
 		document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
 		inputActive = true;
