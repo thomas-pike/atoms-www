@@ -1,3 +1,4 @@
+'use strict';
 class VI {
 	constructor(playerId, level) {
 		this.playerId = playerId;
@@ -58,11 +59,56 @@ class VI {
 		} else if(this.level == 1) {
 			// Play completely randomly, don't even look at the board state!
 			// Note: could theoretically loop for a very long time trying to
-			// execute a valid move.
+			// execute a valid move, but in practice this does not happen.
 			do {
 				var x = this.getRandomInt(1, numColumns);
 				var y = this.getRandomInt(1, numRows);
 			} while(!doMove(document.getElementById('cell_' + x + '_' + y)));
+		} else if(this.level == 2) {
+			// Play randomly with the following exceptions:
+			// - Always detonate a fully-loaded cell if adjacent to an enemy fully-loaded cell
+			// - Avoid playing in a cell next to an enemy fully-loaded cell
+			var cells = [];
+			for(var i = 1; i <= 3; i++) {
+				cells = cells.concat(...document.querySelectorAll('#board .cell[data-atoms="' + i + '"][data-max-atoms="' + i + '"]'));
+			}
+			var myCells = [];
+			var enemyCells = [];
+			var detonateCells = [];
+			var dangerCoords = {};
+			for(var i = 0, cell; cell = cells[i]; i++) {
+				if(cell.dataset.playerId == this.playerId) {
+					myCells.push(cell);
+				} else {
+					enemyCells.push(cell);
+					var x = parseInt(cell.style.gridColumn);
+					var y = parseInt(cell.style.gridRow);
+					var neighbours = ['cell_' + (x - 1) + '_' + y, 'cell_' + (x + 1) + '_' + y, 'cell_' + x + '_' + (y - 1), 'cell_' + x + '_' + (y + 1)];
+					var neighbour;
+					for(var j = 0, neighbourId; neighbourId = neighbours[j]; j++) {
+						if(neighbour = document.getElementById(neighbourId)) {
+							if(neighbour.dataset.playerId == this.playerId && neighbour.dataset.atoms == neighbour.dataset.maxAtoms) {
+								detonateCells.push(neighbour);
+							} else {
+								dangerCoords['cell_' + (parseInt(neighbour.style.gridColumn) + '_' + parseInt(neighbour.style.gridRow))] = true;
+							}
+						}
+					}
+				}
+			}
+			if(detonateCells.length > 0) {
+				// Blow up one of these cells
+				var cell = detonateCells[Math.floor(Math.random() * detonateCells.length)];
+				doMove(cell);
+			} else {
+				// Play semi-randomly
+				var tries = 0;
+				do {
+					tries++;
+					var x = this.getRandomInt(1, numColumns);
+					var y = this.getRandomInt(1, numRows);
+				} while((dangerCoords['cell_' + x + '_' + y] && tries < 20) || !doMove(document.getElementById('cell_' + x + '_' + y)));
+			}
 		}
 	}
 }

@@ -77,7 +77,7 @@ function configureGame() {
 		th.className = 'player' + i;
 		th.appendChild(document.createTextNode('Player ' + (i + 1)));
 		tr.appendChild(th);
-		var playerTypes = ['Human', 'CPU (Easy)'];
+		var playerTypes = ['Human', 'CPU (Easy)', 'CPU (Medium)'];
 		for(var j = 0, playerType; playerType = playerTypes[j]; j++) {
 			var td = document.createElement('td');
 			var radio = document.createElement('input');
