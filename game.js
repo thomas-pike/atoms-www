@@ -109,6 +109,12 @@ function configureGame() {
 	button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));}, false);
 	p.appendChild(button);
 	intro.appendChild(p);
+	var p = document.createElement('p');
+	var a = document.createElement('a');
+	a.href = 'about.html';
+	a.appendChild(document.createTextNode('About the game'));
+	p.appendChild(a)
+	intro.appendChild(p);
 }
 
 function setNumberOfPlayers(numPlayers) {

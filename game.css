@@ -32,6 +32,17 @@ h1 {
 h1 img {
 	width: 100%;
 }
+a {
+	color: #bbf;
+}
+a:hover {
+	color: #eef;
+}
+#about {
+	margin: 50px auto;
+	width: 500px;
+	text-align: justify;
+}
 #intro {
 	margin: 50px auto;
 	width: 500px;
