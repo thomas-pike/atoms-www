@@ -305,22 +305,13 @@ function explodeCell(cell, postAdd) {
 	}
 	var x = parseInt(cell.style.gridColumn, 10);
 	var y = parseInt(cell.style.gridRow, 10);
+	var neighbours = ['cell_' + (x - 1) + '_' + y, 'cell_' + (x + 1) + '_' + y, 'cell_' + x + '_' + (y - 1), 'cell_' + x + '_' + (y + 1)];
 	var neighbour;
-	if(neighbour = document.getElementById('cell_' + (x - 1) + '_' + y)) {
-		addAtom(neighbour, playerId, postAdd);
-		postAdd = function(){};
-	}
-	if(neighbour = document.getElementById('cell_' + (x + 1) + '_' + y)) {
-		addAtom(neighbour, playerId, postAdd);
-		postAdd = function(){};
-	}
-	if(neighbour = document.getElementById('cell_' + x + '_' + (y - 1))) {
-		addAtom(neighbour, playerId, postAdd);
-		postAdd = function(){};
-	}
-	if(neighbour = document.getElementById('cell_' + x + '_' + (y + 1))) {
-		addAtom(neighbour, playerId, postAdd);
-		postAdd = function(){};
+	for(var i = 0, neighbourId; neighbourId = neighbours[i]; neighbour++) {
+		if(neighbour = document.getElementById(neighbourId)) {
+			addAtom(neighbour, playerId, postAdd);
+			postAdd = function(){};
+		}
 	}
 }
 
