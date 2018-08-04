@@ -68,19 +68,14 @@ class VI {
 			// Play randomly with the following exceptions:
 			// - Always detonate a fully-loaded cell if adjacent to an enemy fully-loaded cell
 			// - Avoid playing in a cell next to an enemy fully-loaded cell
-			var cells = [];
+			var fullCells = [];
 			for(var i = 1; i <= 3; i++) {
-				cells = cells.concat(...document.querySelectorAll('#board .cell[data-atoms="' + i + '"][data-max-atoms="' + i + '"]'));
+				fullCells = fullCells.concat(...document.querySelectorAll('#board .cell[data-atoms="' + i + '"][data-max-atoms="' + i + '"]'));
 			}
-			var myCells = [];
-			var enemyCells = [];
 			var detonateCells = [];
 			var dangerCoords = {};
-			for(var i = 0, cell; cell = cells[i]; i++) {
-				if(cell.dataset.playerId == this.playerId) {
-					myCells.push(cell);
-				} else {
-					enemyCells.push(cell);
+			for(var i = 0, cell; cell = fullCells[i]; i++) {
+				if(cell.dataset.playerId != this.playerId) {
 					var x = parseInt(cell.style.gridColumn);
 					var y = parseInt(cell.style.gridRow);
 					var neighbours = ['cell_' + (x - 1) + '_' + y, 'cell_' + (x + 1) + '_' + y, 'cell_' + x + '_' + (y - 1), 'cell_' + x + '_' + (y + 1)];
