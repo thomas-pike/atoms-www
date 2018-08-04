@@ -242,14 +242,20 @@ function nextPlayer() {
 			delete players[i].vi;
 		}
 	}
+	if(playerId >= 0) {
+		var playerIcon = document.getElementById('playerList').getElementsByClassName('player' + playerId)[0];
+		playerIcon.className = playerIcon.className.replace(' active', '');
+	}
 	playerId++;
 	if(!players[playerId]) playerId = 0;
 	if(!players[playerId].alive) {
 		nextPlayer();
 	} else if(players[playerId].vi) {
+		document.getElementById('playerList').getElementsByClassName('player' + playerId)[0].className += ' active';
 		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
 		setTimeout(function() {players[playerId].vi.play()}, 300);
 	} else {
+		document.getElementById('playerList').getElementsByClassName('player' + playerId)[0].className += ' active';
 		document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
 		inputActive = true;
 	}

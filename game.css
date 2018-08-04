@@ -236,6 +236,7 @@ h1 small {
 	position: relative;
 	float: left;
 	border-radius: 20px 20px 0 0;
+	border: 1px solid black;
 }
 .player:before {
 	content: '';
@@ -245,6 +246,12 @@ h1 small {
 	height: 30px;
 	border-radius: 15px;
 	border: 1px solid black;
+}
+.player.active {
+	box-shadow: 0 0 20px white;
+}
+.player.active:before {
+	box-shadow: 0 -2px 13px white;
 }
 .player.dead:after {
 	content: 'X';
