@@ -54,10 +54,11 @@ h1 small {
 	color: var(--player3-color);
 }
 #intro label {
+	font-size: 0.8em;
 	position: relative;
 	display: inline-block;
-	margin: 5px;
-	padding: 5px 30px 5px 5px;
+	margin: 0;
+	padding: 5px 20px 5px 5px;
 	border: 2px solid;
 	border-color: #88a #224 #224 #88a;
 }
@@ -72,8 +73,8 @@ h1 small {
 	content: '\2713';
 	color: white;
 	position: absolute;
-	top: 7px;
-	right: 7px;
+	top: 6px;
+	right: 3px;
 	font-size: 12pt;
 	font-weight: bold;
 	line-height: 1em;

@@ -64,8 +64,8 @@ class VI {
 				var x = this.getRandomInt(1, numColumns);
 				var y = this.getRandomInt(1, numRows);
 			} while(!doMove(document.getElementById('cell_' + x + '_' + y)));
-		} else if(this.level == 2) {
-			// Play randomly with the following exceptions:
+		} else if(this.level >= 2) {
+			// Important survival rules:
 			// - Always detonate a fully-loaded cell if adjacent to an enemy fully-loaded cell
 			// - Avoid playing in a cell next to an enemy fully-loaded cell
 			var fullCells = [];
@@ -95,15 +95,59 @@ class VI {
 				// Blow up one of these cells
 				var cell = detonateCells[Math.floor(Math.random() * detonateCells.length)];
 				doMove(cell);
-			} else {
-				// Play semi-randomly
-				var tries = 0;
-				do {
-					tries++;
-					var x = this.getRandomInt(1, numColumns);
-					var y = this.getRandomInt(1, numRows);
-				} while((dangerCoords['cell_' + x + '_' + y] && tries < 20) || !doMove(document.getElementById('cell_' + x + '_' + y)));
+				return;
 			}
+			if(this.level == 3) {
+				// Play with a bit of strategy:
+				// - Strongly prefer a place that gives an atom advantage over a neighbouring cell
+				// - Prefer claiming a corner
+				if(Math.random() < 0.9) {
+					var cells = document.querySelectorAll('#board .cell');
+					var priorityCells = [];
+					for(var i = 0, cell; cell = cells[i]; i++) {
+						if(cell.dataset.atoms > 0 && cell.dataset.playerId != this.playerId) {
+							var x = parseInt(cell.style.gridColumn);
+							var y = parseInt(cell.style.gridRow);
+							var neighbours = ['cell_' + (x - 1) + '_' + y, 'cell_' + (x + 1) + '_' + y, 'cell_' + x + '_' + (y - 1), 'cell_' + x + '_' + (y + 1)];
+							var neighbour;
+							for(var j = 0, neighbourId; neighbourId = neighbours[j]; j++) {
+								if(neighbour = document.getElementById(neighbourId)) {
+									if(neighbour.dataset.playerId == this.playerId || neighbour.dataset.playerId == "-1") {
+										if(parseInt(neighbour.dataset.maxAtoms) - parseInt(neighbour.dataset.atoms) <= parseInt(cell.dataset.maxAtoms) - parseInt(cell.dataset.atoms)) {
+											if(!dangerCoords[neighbourId]) {
+												priorityCells.push(neighbour);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					if(priorityCells.length > 0) {
+						// Add to one of the priority cells
+						var cell = priorityCells[Math.floor(Math.random() * priorityCells.length)];
+						doMove(cell);
+						return;
+					}
+				}
+				if(Math.random() < 0.8) {
+					var corners = ['cell_1_1', 'cell_' + numColumns + '_1', 'cell_1_' + numRows, 'cell_' + numColumns + '_' + numRows];
+					for(var i = 0, cornerId; cornerId = corners[i]; i++) {
+						var corner = document.getElementById(cornerId);
+						if(corner.dataset.atoms == 0 && !dangerCoords[corner.id]) {
+							doMove(corner);
+							return;
+						}
+					}
+				}
+			}
+			// Play semi-randomly, trying to avoid danger cells
+			var tries = 0;
+			do {
+				tries++;
+				var x = this.getRandomInt(1, numColumns);
+				var y = this.getRandomInt(1, numRows);
+			} while((dangerCoords['cell_' + x + '_' + y] && tries < 20) || !doMove(document.getElementById('cell_' + x + '_' + y)));
 		}
 	}
 }

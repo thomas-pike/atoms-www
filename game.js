@@ -77,9 +77,9 @@ function configureGame() {
 		th.className = 'player' + i;
 		th.appendChild(document.createTextNode('Player ' + (i + 1)));
 		tr.appendChild(th);
-		var playerTypes = ['Human', 'CPU (Easy)', 'CPU (Medium)'];
+		var playerTypes = ['Human', 'CPU (Easy)', 'CPU (Medium)', 'CPU (Hard)'];
+		var td = document.createElement('td');
 		for(var j = 0, playerType; playerType = playerTypes[j]; j++) {
-			var td = document.createElement('td');
 			var radio = document.createElement('input');
 			radio.type = 'radio';
 			radio.name = 'player' + i;
@@ -97,8 +97,8 @@ function configureGame() {
 			label.htmlFor = 'player_' + i + '_' + j;
 			label.appendChild(document.createTextNode(playerType));
 			td.appendChild(label);
-			tr.appendChild(td);
 		}
+		tr.appendChild(td);
 		tbody.appendChild(tr);
 	}
 	table.appendChild(tbody);
