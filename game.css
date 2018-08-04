@@ -24,7 +24,7 @@ body {
 h1 {
 	line-height: 1;
 	width: 500px;
-	margin: 50px auto;
+	margin: 50px auto 10px auto;
 	padding: 0;
 	text-align: center;
 	font-size: 50pt;
@@ -33,7 +33,7 @@ h1 img {
 	width: 100%;
 }
 #intro {
-	margin: 100px auto;
+	margin: 50px auto;
 	width: 500px;
 	text-align: center;
 }
@@ -100,14 +100,14 @@ h1 img {
 }
 #status {
 	width: 500px;
-	height: 80px;
+	height: 60px;
 	margin: 10px auto;
-	font-size: 24pt;
+	font-size: 20pt;
 }
 #status button {
-	font-size: 24pt;
+	font-size: 20pt;
 	line-height: 1;
-	padding: 15px;
+	padding: 10px;
 	background-color: black;
 	color: white;
 	border: 2px solid;
