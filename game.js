@@ -307,7 +307,7 @@ function explodeCell(cell, postAdd) {
 	var y = parseInt(cell.style.gridRow, 10);
 	var neighbours = ['cell_' + (x - 1) + '_' + y, 'cell_' + (x + 1) + '_' + y, 'cell_' + x + '_' + (y - 1), 'cell_' + x + '_' + (y + 1)];
 	var neighbour;
-	for(var i = 0, neighbourId; neighbourId = neighbours[i]; neighbour++) {
+	for(var i = 0, neighbourId; neighbourId = neighbours[i]; i++) {
 		if(neighbour = document.getElementById(neighbourId)) {
 			addAtom(neighbour, playerId, postAdd);
 			postAdd = function(){};
