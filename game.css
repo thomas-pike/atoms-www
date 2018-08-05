@@ -148,8 +148,8 @@ a:hover {
 	position: relative;
 }
 .cell.filled {
-	background-color: #348;
-	border-color: #88a #224 #224 #88a;
+	background-color: #202464;
+	border-color: #668 #113 #113 #668;
 	border-width: 2px;
 }
 .atom {
