@@ -206,16 +206,16 @@ a:hover {
 	transform: scale(0.1);
 }
 .atom.player0 {
-	background: radial-gradient(circle at 6px 6px, var(--player0-color), #000);
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player0-color) 20%, #000);
 }
 .atom.player1 {
-	background: radial-gradient(circle at 6px 6px, var(--player1-color), #000);
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player1-color) 20%, #000);
 }
 .atom.player2 {
-	background: radial-gradient(circle at 6px 6px, var(--player2-color), #000);
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player2-color) 20%, #000);
 }
 .atom.player3 {
-	background: radial-gradient(circle at 6px 6px, var(--player3-color), #000);
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player3-color) 20%, #000);
 }
 .explosion {
 	transition-property: transform, opacity, background-color;
