@@ -10,6 +10,10 @@ html {
 	height: 100%;
 	width: 100%;
 }
+body {
+	width: 500px;
+	margin: auto;
+}
 button, input, label {
 	cursor: inherit;
 }
