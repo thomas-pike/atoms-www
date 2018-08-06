@@ -57,16 +57,16 @@ a:hover {
 #intro table {
 	margin: auto;
 }
-#intro th.player0 {
+#intro th.player0, span.player0 {
 	color: var(--player0-color);
 }
-#intro th.player1 {
+#intro th.player1, span.player1 {
 	color: var(--player1-color);
 }
-#intro th.player2 {
+#intro th.player2, span.player2 {
 	color: var(--player2-color);
 }
-#intro th.player3 {
+#intro th.player3, span.player3 {
 	color: var(--player3-color);
 }
 #intro label {

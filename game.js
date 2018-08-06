@@ -387,11 +387,17 @@ function drawAtoms(cell, postTransition) {
 }
 
 function chainReaction(postChain) {
-	if(isGameOver()) {
+	var winner = getWinner();
+	if(winner !== false) {
+		winner.wins++;
 		console.log('Game over!');
 		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
 		var status = document.getElementById('status');
-		status.appendChild(document.createTextNode('Well done. '));
+		var span = document.createElement('span');
+		span.className = 'player' + winner.playerId;
+		span.appendChild(document.createTextNode('Player ' + (winner.playerId + 1)));
+		status.appendChild(span);
+		status.appendChild(document.createTextNode(' wins! '));
 		var playAgain = document.createElement('button');
 		playAgain.addEventListener('click', function() { restart();});
 		playAgain.appendChild(document.createTextNode('Play again'));
@@ -408,11 +414,16 @@ function chainReaction(postChain) {
 	}
 }
 
-function isGameOver() {
-	for(var i = 0, player, alive = 0; player = players[i]; i++) {
-		if(player.alive) alive++;
+function getWinner() {
+	var alive = [];
+	for(var i = 0, player; player = players[i]; i++) {
+		if(player.alive) alive.push(player);
 	}
-	return alive <= 1;
+	if(alive.length == 1) {
+		return alive.pop();
+	} else {
+		return false;
+	}
 }
 
 function restart() {
