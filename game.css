@@ -6,6 +6,8 @@
 }
 html {
 	cursor: url('cursor.svg') 18 3, default;
+}
+html.game {
 	overflow: hidden;
 	height: 100%;
 	width: 100%;
