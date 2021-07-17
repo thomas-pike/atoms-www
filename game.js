@@ -103,10 +103,73 @@ function configureGame() {
 	}
 	table.appendChild(tbody);
 	intro.appendChild(table);
+
+	var table = document.createElement('table');
+	var caption = document.createElement('caption');
+	caption.appendChild(document.createTextNode('Options'));
+	var tbody = document.createElement('tbody');
+	var tr = document.createElement('tr');
+	var th = document.createElement('th');
+	th.appendChild(document.createTextNode('Color scheme'));
+	tr.appendChild(th);
+	var colorSchemes = ['Original', 'Alternate'];
+	var td = document.createElement('td');
+	for(var i = 0, colorScheme; colorScheme = colorSchemes[i]; i++) {
+		var radio = document.createElement('input');
+		radio.type = 'radio';
+		radio.name = 'colors';
+		radio.id = 'colors_' + colorScheme;
+		radio.value = colorScheme;
+		if(i == 0 && document.documentElement.className.indexOf('high-contrast') == -1) {
+			radio.checked = true;
+		}
+		if(i == 1 && document.documentElement.className.indexOf('high-contrast') >= 0) {
+			radio.checked = true;
+		}
+		radio.addEventListener('change', function() { setColorScheme(this.value)});
+		td.appendChild(radio);
+		var label = document.createElement('label');
+		label.htmlFor = 'colors_' + colorScheme;
+		label.appendChild(document.createTextNode(colorScheme));
+		td.appendChild(label);
+	}
+	tr.appendChild(td);
+	tbody.appendChild(tr);
+	var tr = document.createElement('tr');
+	var th = document.createElement('th');
+	th.appendChild(document.createTextNode('Atom shapes'));
+	tr.appendChild(th);
+	var shapeSchemes = ['Round', 'Varied'];
+	var td = document.createElement('td');
+	for(var i = 0, shapeScheme; shapeScheme = shapeSchemes[i]; i++) {
+		var radio = document.createElement('input');
+		radio.type = 'radio';
+		radio.name = 'shapes';
+		radio.id = 'shapes_' + shapeScheme;
+		radio.value = shapeScheme;
+		if(i == 0 && document.documentElement.className.indexOf('shaped-atoms') == -1) {
+			radio.checked = true;
+		}
+		if(i == 1 && document.documentElement.className.indexOf('shaped-atoms') >= 0) {
+			radio.checked = true;
+		}
+		radio.addEventListener('change', function() { setShapeScheme(this.value)});
+		td.appendChild(radio);
+		var label = document.createElement('label');
+		label.htmlFor = 'shapes_' + shapeScheme;
+		label.appendChild(document.createTextNode(shapeScheme));
+		td.appendChild(label);
+	}
+	tr.appendChild(td);
+	tbody.appendChild(tr);
+	table.appendChild(caption);
+	table.appendChild(tbody);
+	intro.appendChild(table);
+
 	var p = document.createElement('p');
 	var button = document.createElement('button');
 	button.appendChild(document.createTextNode('Start game'));
-	button.addEventListener('click', function() { setupGame(parseInt(this.dataset.players));}, false);
+	button.addEventListener('click', function() { setupGame();}, false);
 	p.appendChild(button);
 	intro.appendChild(p);
 	var p = document.createElement('p');
@@ -146,6 +209,22 @@ function configurePlayer(playerId, level) {
 		} else {
 			players[playerId].vi.level = level;
 		}
+	}
+}
+
+function setColorScheme(scheme) {
+	if(scheme == 'Alternate') {
+		document.documentElement.className += ' high-contrast';
+	} else {
+		document.documentElement.className = document.documentElement.className.replace(' high-contrast', '')
+	}
+}
+
+function setShapeScheme(scheme) {
+	if(scheme == 'Varied') {
+		document.documentElement.className += ' shaped-atoms';
+	} else {
+		document.documentElement.className = document.documentElement.className.replace(' shaped-atoms', '')
 	}
 }
 
@@ -262,7 +341,8 @@ function nextPlayer() {
 		setTimeout(function() {players[playerId].vi.play()}, 300);
 	} else {
 		document.getElementById('playerList').getElementsByClassName('player' + playerId)[0].className += ' active';
-		document.documentElement.style.cursor = 'url("cursor-player' + playerId + '.svg") 18 3, default';
+		var highContrast = document.documentElement.className.indexOf('high-contrast') >= 0 ? '-hc' : '';
+		document.documentElement.style.cursor = 'url("cursor-player' + playerId + highContrast +'.svg") 18 3, default';
 		inputActive = true;
 	}
 }

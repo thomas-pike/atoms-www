@@ -4,6 +4,12 @@
 	--player2-color: #ffaa33;
 	--player3-color: #33ffff;
 }
+html.high-contrast {
+	--player0-color: #ff3333;
+	--player1-color: #ffffff;
+	--player2-color: #555555;
+	--player3-color: #33aaaa;
+}
 html {
 	cursor: url('cursor.svg') 18 3, default;
 }
@@ -56,6 +62,11 @@ a:hover {
 }
 #intro table {
 	margin: auto;
+	text-align: left;
+}
+#intro caption {
+	margin-top: 30px;
+	font-weight: bold;
 }
 #intro th.player0, span.player0 {
 	color: var(--player0-color);
@@ -73,8 +84,9 @@ a:hover {
 	font-size: 0.8em;
 	position: relative;
 	display: inline-block;
+	min-width: 50px;
 	margin: 0;
-	padding: 5px 20px 5px 5px;
+	padding: 5px 20px 5px 10px;
 	border: 2px solid;
 	border-color: #88a #224 #224 #88a;
 }
@@ -154,6 +166,10 @@ a:hover {
 	border-color: #88a #002 #002 #88a;
 	border-width: 2px;
 }
+html.high-contrast .cell.filled {
+	background-color: #aaa;
+	border-color: #ddd #666 #666 #ddd;
+}
 .atom {
 	transition-property: transform, left, top;
 	transition-duration: 100ms;
@@ -161,7 +177,7 @@ a:hover {
 	position: absolute;
 	width: 18px;
 	height: 18px;
-	box-shadow: 0px 0px 1px black;
+	box-shadow: -1px 0px 0px black, 0px -1px 0px black, 1px 0px 0px black, 0px 1px 0px black;
 }
 .atom.atom1.pos1 {
 	left: 15px;
@@ -223,6 +239,19 @@ a:hover {
 .atom.player3 {
 	background: radial-gradient(circle at 4px 6px, #ddd, var(--player3-color) 20%, #000);
 }
+html.shaped-atoms .atom.player1, html.shaped-atoms .player.player1:before {
+	border-radius: 15%;
+}
+html.shaped-atoms .atom.player2, html.shaped-atoms .player.player2:before {
+	transform: rotate(45deg);
+	border-radius: 15%;
+}
+html.shaped-atoms .atom.player2.size0 {
+	transform: rotate(45deg) scale(0.1);
+}
+html.shaped-atoms .atom.player3, html.shaped-atoms .player.player3:before {
+	border-radius: 30% 100%;
+}
 .explosion {
 	transition-property: transform, opacity, background-color;
 	transition-duration: 200ms;
@@ -261,7 +290,7 @@ a:hover {
 	margin: -25px 5px 0 5px;
 	width: 30px;
 	height: 30px;
-	border-radius: 15px;
+	border-radius: 50%;
 	border: 1px solid black;
 }
 .player.active {
