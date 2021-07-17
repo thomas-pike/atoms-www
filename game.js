@@ -1,7 +1,6 @@
 'use strict';
 var numColumns = 10;
 var numRows = 6;
-var playerColors = ['#ff5555', '#55ff55', '#ffcc55', '#55ccff'];
 var players = [];
 var minPlayers = 2;
 var maxPlayers = 4;
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
 class Player {
 	constructor(playerId) {
 		this.playerId = playerId;
-		this.color = playerColors[playerId];
 		this.alive = true;
 		this.turns = 0;
 		this.atoms = 0;
