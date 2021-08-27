@@ -302,8 +302,8 @@ html.shaped-atoms .atom.player3, html.shaped-atoms .player.player3:before {
 .player.dead:after {
 	content: 'X';
 	position: absolute;
-	margin-top: -25px;
-	width: 40px;
+	margin-top: -30px;
+	width: 45px;
 	height: 65px;
 	background-color: rgba(0, 0, 0, 0.8);
 	color: red;
