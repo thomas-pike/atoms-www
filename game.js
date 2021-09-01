@@ -227,6 +227,8 @@ function setShapeScheme(scheme) {
 }
 
 function setupGame() {
+	startMusic();
+
 	if(document.getElementById('intro')) {
 		document.body.removeChild(document.getElementById('intro'));
 	}
@@ -254,6 +256,21 @@ function setupGame() {
 			}, false);
 		});
 	});
+}
+
+function startMusic() {
+	document.getElementById('music-intro').play();
+	document.getElementById('music-intro').addEventListener('ended', loopMusic);
+}
+
+function loopMusic() {
+	document.getElementById('music').play();
+}
+
+function stopMusic() {
+	document.getElementById('music-intro').removeEventListener('ended', loopMusic);
+	document.getElementById('music').pause();
+	document.getElementById('music').load();
 }
 
 function createBoard(numColumns, numRows) {
@@ -468,6 +485,7 @@ function chainReaction(postChain) {
 	var winner = getWinner();
 	if(winner !== false) {
 		winner.wins++;
+		stopMusic();
 		console.log('Game over!');
 		document.documentElement.style.cursor = 'url("cursor.svg") 18 3, default';
 		var status = document.getElementById('status');
@@ -505,9 +523,9 @@ function getWinner() {
 }
 
 function restart() {
-	for(var child; child = document.body.childNodes[1];) {
-		document.body.removeChild(child);
-	}
+	document.body.removeChild(document.getElementById('status'));
+	document.body.removeChild(document.getElementById('board'));
+	document.body.removeChild(document.getElementById('playerList'));
 	for(var i = 0, player; player = players[i]; i++) {
 		player.alive = true;
 		player.turns = 0;
