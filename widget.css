@@ -1,0 +1,338 @@
+:root {
+	--player0-color: #ff3333;
+	--player1-color: #33ff33;
+	--player2-color: #ffaa33;
+	--player3-color: #33ffff;
+}
+html.high-contrast {
+	--player0-color: #ff3333;
+	--player1-color: #ffffff;
+	--player2-color: #555555;
+	--player3-color: #33aaaa;
+}
+html {
+	cursor: url('cursor.svg') 18 3, default;
+}
+html.game {
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+}
+body {
+	width: 394px;
+	margin: auto;
+}
+button, input, label {
+	cursor: inherit;
+}
+label.disabled {
+	visibility: hidden;
+}
+body {
+	background-color: black;
+	color: white;
+	font-family: sans-serif;
+}
+h1 {
+	line-height: 1;
+	width: 200px;
+	margin: 0px auto 5px auto;
+	padding: 0;
+	text-align: center;
+	font-size: 50pt;
+}
+h1 img {
+	width: 100%;
+}
+a {
+	color: #bbf;
+}
+a:hover {
+	color: #eef;
+}
+#about {
+	margin: 50px auto;
+	width: 394px;
+	text-align: justify;
+}
+#intro {
+	margin: 5px auto;
+	width: 394px;
+	text-align: center;
+}
+#intro table {
+	margin: auto;
+	text-align: left;
+}
+#intro caption {
+	margin-top: 30px;
+	font-weight: bold;
+}
+#intro th.player0, span.player0 {
+	color: var(--player0-color);
+}
+#intro th.player1, span.player1 {
+	color: var(--player1-color);
+}
+#intro th.player2, span.player2 {
+	color: var(--player2-color);
+}
+#intro th.player3, span.player3 {
+	color: var(--player3-color);
+}
+#intro label {
+	font-size: 0.8em;
+	position: relative;
+	display: inline-block;
+	min-width: 30px;
+	margin: 0;
+	padding: 5px 20px 5px 10px;
+	border: 2px solid;
+	border-color: #88a #224 #224 #88a;
+}
+#intro label[for="player_0_2"],
+#intro label[for="player_1_2"],
+#intro label[for="player_2_2"],
+#intro label[for="player_3_2"] {
+    display: none;
+}
+#intro table:nth-of-type(2) {
+    display: none;
+}
+#intro p:nth-of-type(3) {
+    display: none;
+}
+#intro input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+}
+#intro input[type="radio"]:checked + label {
+	background-color: #448;
+}
+#intro input[type="radio"]:checked + label::after {
+	content: '\2713';
+	color: white;
+	position: absolute;
+	top: 6px;
+	right: 3px;
+	font-size: 12pt;
+	font-weight: bold;
+	line-height: 1em;
+}
+#intro input[type="radio"]:focus + label {
+	outline: 1px solid white;
+}
+#intro button {
+	font-size: 18pt;
+	line-height: 1;
+	margin: 20px;
+	padding: 10px;
+	background-color: black;
+	color: white;
+	border: 2px solid;
+	border-color: #88a #224 #224 #88a;
+}
+#intro button:focus {
+	outline: 1px solid white;
+}
+#intro button:active {
+	background-color: #448;
+	outline: none;
+}
+#status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+	width: 150px;
+	height: 60px;
+	margin: 10px auto;
+	font-size: 12pt;
+}
+#status button {
+	font-size: 12pt;
+	line-height: 1;
+	padding: 10px;
+	background-color: black;
+	color: white;
+	border: 2px solid;
+	border-color: #88a #224 #224 #88a;
+}
+#board {
+	margin: 5px auto;
+	width: 390px;
+	height: 234px;
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(6, 1fr);
+	transition-property: transform;
+	transition-duration: 2000ms;
+}
+#board.start {
+	transform: scale(5) rotate(0.5turn);
+}
+.cell {
+	background-color: transparent;
+	border: 1px solid white;
+	outline: none;
+	position: relative;
+}
+.cell.filled {
+	background-color: #202464;
+	border-color: #88a #002 #002 #88a;
+	border-width: 2px;
+}
+html.high-contrast .cell.filled {
+	background-color: #aaa;
+	border-color: #ddd #666 #666 #ddd;
+}
+.atom {
+	transition-property: transform, left, top;
+	transition-duration: 100ms;
+	border-radius: 50%;
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	box-shadow: -1px 0px 0px black, 0px -1px 0px black, 1px 0px 0px black, 0px 1px 0px black;
+}
+.atom.atom1.pos1 {
+	left: 12px;
+	top: 12px;
+}
+.atom.atom1.pos2 {
+	left: 5px;
+	top: 12px;
+}
+.atom.atom1.pos3 {
+	left: 5px;
+	top: 5px;
+}
+.atom.atom1.pos4 {
+	left: 5px;
+	top: 4px;
+}
+.atom.atom2.pos1 {
+	left: 19px;
+	top: 12px;
+}
+.atom.atom2.pos2 {
+	left: 19px;
+	top: 5px;
+}
+.atom.atom2.pos3 {
+	left: 19px;
+	top: 4px;
+}
+.atom.atom3.pos1 {
+	left: 12px;
+	top: 19px;
+}
+.atom.atom3.pos2 {
+	left: 5px;
+	top: 19px;
+}
+.atom.atom4.pos1 {
+	left: 19px;
+	top: 19px;
+}
+.atom.atom5.pos1 {
+	left: 12px;
+	top: 12px;
+	visibility: hidden;
+}
+.atom.size0 {
+	transform: scale(0.1);
+}
+.atom.player0 {
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player0-color) 20%, #000);
+}
+.atom.player1 {
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player1-color) 20%, #000);
+}
+.atom.player2 {
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player2-color) 20%, #000);
+}
+.atom.player3 {
+	background: radial-gradient(circle at 4px 6px, #ddd, var(--player3-color) 20%, #000);
+}
+html.shaped-atoms .atom.player1, html.shaped-atoms .player.player1:before {
+	border-radius: 15%;
+}
+html.shaped-atoms .atom.player2, html.shaped-atoms .player.player2:before {
+	transform: rotate(45deg);
+	border-radius: 15%;
+}
+html.shaped-atoms .atom.player2.size0 {
+	transform: rotate(45deg) scale(0.1);
+}
+html.shaped-atoms .atom.player3, html.shaped-atoms .player.player3:before {
+	border-radius: 30% 100%;
+}
+.explosion {
+	transition-property: transform, opacity, background-color;
+	transition-duration: 200ms;
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.explosion.start {
+	opacity: 1;
+	transform: scale(0.1);
+	background-color: white;
+}
+.explosion.end {
+	opacity: 0;
+	background-color: white;
+}
+#playerList {
+	margin: auto;
+	width: 390px;
+}
+.player {
+	width: 40px;
+	height: 30px;
+	margin: 25px 5px 5px 5px;
+	position: relative;
+	float: left;
+	border-radius: 20px 20px 0 0;
+	border: 1px solid black;
+}
+.player:before {
+	content: '';
+	position: absolute;
+	margin: -25px 5px 0 5px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	border: 1px solid black;
+}
+.player.active {
+	box-shadow: 0 0 20px white;
+}
+.player.active:before {
+	box-shadow: 0 -2px 13px white;
+}
+.player.dead:after {
+	content: 'X';
+	position: absolute;
+	margin-top: -30px;
+	width: 45px;
+	height: 65px;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: red;
+	font-size: 60px;
+}
+.player.player0, .player.player0:before {
+	background-color: var(--player0-color);
+}
+.player.player1, .player.player1:before {
+	background-color: var(--player1-color);
+}
+.player.player2, .player.player2:before {
+	background-color: var(--player2-color);
+}
+.player.player3, .player.player3:before {
+	background-color: var(--player3-color);
+}
