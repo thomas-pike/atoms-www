@@ -259,18 +259,26 @@ function setupGame() {
 }
 
 function startMusic() {
-	document.getElementById('music-intro').play();
-	document.getElementById('music-intro').addEventListener('ended', loopMusic);
+	if (document.getElementById('music-intro')) {
+		document.getElementById('music-intro').play();
+		document.getElementById('music-intro').addEventListener('ended', loopMusic);
+	}
 }
 
 function loopMusic() {
-	document.getElementById('music').play();
+	if (document.getElementById('music')) {
+		document.getElementById('music').play();
+	}
 }
 
 function stopMusic() {
-	document.getElementById('music-intro').removeEventListener('ended', loopMusic);
-	document.getElementById('music').pause();
-	document.getElementById('music').load();
+	if (document.getElementById('music-intro')) {
+		document.getElementById('music-intro').removeEventListener('ended', loopMusic);
+	}
+	if (document.getElementById('music')) {
+		document.getElementById('music').pause();
+		document.getElementById('music').load();
+	}
 }
 
 function createBoard(numColumns, numRows) {
