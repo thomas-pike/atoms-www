@@ -174,6 +174,7 @@ function configureGame() {
 	var a = document.createElement('a');
 	a.href = 'about.html';
 	a.appendChild(document.createTextNode('About the game'));
+	a.addEventListener('click', function (e) { showInstructions();e.preventDefault();}, false)
 	p.appendChild(a)
 	intro.appendChild(p);
 }
@@ -224,6 +225,25 @@ function setShapeScheme(scheme) {
 	} else {
 		document.documentElement.className = document.documentElement.className.replace(' shaped-atoms', '')
 	}
+}
+
+function showInstructions() {
+	const request = new Request('about.html');
+	fetch(request).then((response) => response.text()).then((html) => {
+		const parser = new DOMParser()
+		const doc = parser.parseFromString(html, "text/html")
+
+		var div = document.createElement('div');
+		div.id = 'instructions';
+		div.append(doc.querySelector('#about'));
+
+		document.body.appendChild(div);
+
+		div.querySelector('a#back').addEventListener('click', function(e) {
+			e.preventDefault();
+			document.body.removeChild(div);
+		})
+	});
 }
 
 function setupGame() {

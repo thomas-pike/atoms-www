@@ -321,3 +321,12 @@ html.shaped-atoms .atom.player3, html.shaped-atoms .player.player3:before {
 .player.player3, .player.player3:before {
 	background-color: var(--player3-color);
 }
+div#instructions {
+	position: fixed;
+	left: 5px;
+	right: 5px;
+	top: 5px;
+	bottom: 5px;
+	border: 1px solid white;
+	background: black;
+}
