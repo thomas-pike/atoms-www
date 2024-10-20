@@ -342,5 +342,5 @@ div#instructions {
 	bottom: 5px;
 	border: 1px solid white;
 	background: black;
-	overflow: scroll;
+	overflow-y: scroll;
 }
