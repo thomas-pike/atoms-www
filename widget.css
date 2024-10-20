@@ -99,9 +99,6 @@ a:hover {
 #intro table:nth-of-type(2) {
     display: none;
 }
-#intro button {
-	margin: 0 !important;
-}
 #intro input[type="radio"] {
 	position: absolute;
 	opacity: 0;
@@ -125,7 +122,6 @@ a:hover {
 #intro button {
 	font-size: 18pt;
 	line-height: 1;
-	margin: 20px;
 	padding: 10px;
 	background-color: black;
 	color: white;
